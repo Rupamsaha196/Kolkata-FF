@@ -1,0 +1,107 @@
+/* Base layout */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #ffffff;
+  color: #000000;
+  margin: 0;
+  padding: 20px;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #0d47a1;
+}
+
+/* Each date block */
+.date-section {
+  margin-bottom: 30px;
+  padding: 10px;
+  background-color: #e3f2fd;
+  border: 2px solid #90caf9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Highlight latest block */
+.date-section.latest {
+  background-color: #bbdefb;
+  border: 3px solid #2196f3;
+  box-shadow: 0 0 12px rgba(33, 150, 243, 0.7);
+}
+
+/* Date heading */
+.date-header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 8px 0;
+  margin-bottom: 10px;
+  background-color: #e1f5fe;
+  color: #0d47a1;
+  border-radius: 6px;
+}
+
+/* Result grid rows */
+.result-row {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 1 label + 9 results */
+  gap: 4px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+/* Label cell (PATTI, SINGLE, etc.) */
+.row-label {
+  font-weight: bold;
+  background-color: #bbdefb;
+  padding: 8px;
+  color: #0d47a1;
+  font-size: clamp(12px, 2.5vw, 18px); /* Responsive font */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+}
+
+/* Individual result cells */
+.cell {
+  background-color: #e3f2fd;
+  padding: 8px;
+  border: 1px solid #90caf9;
+  font-size: clamp(12px, 2.5vw, 18px); /* Responsive font */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+}
+.row-label {
+  font-weight: bold;
+  background-color: #bbdefb;
+  padding: 8px;
+  color: #0d47a1;
+  font-size: clamp(12px, 2.5vw, 18px); /* Responsive font size */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+}
+
+.cell {
+  background-color: #e3f2fd;
+  padding: 8px;
+  border: 1px solid #90caf9;
+  font-size: clamp(12px, 2.5vw, 18px); /* Same responsive size as label */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+}
