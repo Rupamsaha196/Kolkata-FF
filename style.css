@@ -5,7 +5,7 @@ body {
   color: #000000;
   margin: 0;
   padding: 20px;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
 .container {
@@ -31,14 +31,13 @@ h1 {
   transition: box-shadow 0.3s ease;
 }
 
-/* Highlight latest block */
 .date-section.latest {
   background-color: #bbdefb;
   border: 3px solid #2196f3;
   box-shadow: 0 0 12px rgba(33, 150, 243, 0.7);
 }
 
-/* Date heading */
+/* Date header */
 .date-header {
   text-align: center;
   font-weight: bold;
@@ -50,58 +49,102 @@ h1 {
   border-radius: 6px;
 }
 
-/* Result grid rows */
+/* Result grid */
 .result-row {
   display: grid;
-  grid-template-columns: repeat(10, 1fr); /* 1 label + 9 results */
+  grid-template-columns: repeat(10, 1fr);
   gap: 4px;
   text-align: center;
   margin-bottom: 6px;
 }
 
-/* Label cell (PATTI, SINGLE, etc.) */
+/* Label cell */
 .row-label {
-  font-weight: bold;
   background-color: #bbdefb;
-  padding: 8px;
   color: #0d47a1;
-  font-size: clamp(12px, 2.5vw, 18px); /* Responsive font */
+  font-weight: bold;
+  font-size: clamp(10px, 1.8vw, 16px);
+  padding: 8px;
+  border-radius: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
 }
 
-/* Individual result cells */
+/* Value cell */
 .cell {
   background-color: #e3f2fd;
-  padding: 8px;
   border: 1px solid #90caf9;
-  font-size: clamp(12px, 2.5vw, 18px); /* Responsive font */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-radius: 4px;
-}
-.row-label {
-  font-weight: bold;
-  background-color: #bbdefb;
+  font-size: clamp(10px, 1.8vw, 16px);
   padding: 8px;
-  color: #0d47a1;
-  font-size: clamp(12px, 2.5vw, 18px); /* Responsive font size */
+  border-radius: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
 }
 
-.cell {
-  background-color: #e3f2fd;
-  padding: 8px;
-  border: 1px solid #90caf9;
-  font-size: clamp(12px, 2.5vw, 18px); /* Same responsive size as label */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-radius: 4px;
+/* MEDIA QUERIES */
+
+/* For very small screens (≤ 480px) */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  .date-header {
+    font-size: 16px;
+  }
+
+  .row-label,
+  .cell {
+    font-size: 10px;
+    padding: 4px;
+  }
+
+  .result-row {
+    gap: 2px;
+  }
+}
+
+/* For medium screens (481px - 768px) */
+@media (max-width: 768px) {
+  .row-label,
+  .cell {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .date-header {
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
+
+/* For large screens (≥ 1200px) */
+@media (min-width: 1200px) {
+  .row-label,
+  .cell {
+    font-size: 16px;
+  }
+
+  .date-header {
+    font-size: 22px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
 }
