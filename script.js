@@ -7,7 +7,7 @@ fetch(url)
   .then(rep => {
     const match = rep.match(/(?<=\().*(?=\);)/s);
     if (!match) throw new Error("❌ Failed to parse sheet data.");
-    
+
     const jsonData = JSON.parse(match[0]);
     const rows = jsonData.table.rows.map(r =>
       r.c.map(c => (c && c.v !== null) ? c.v : '')
@@ -15,17 +15,18 @@ fetch(url)
 
     const grouped = {};
     rows.forEach(row => {
-      const [rawDate, , ...cols] = row;
+      const [rawDate, type, ...cols] = row;
       const date = formatDate(rawDate);
       if (!grouped[date]) grouped[date] = [];
-      grouped[date].push(fillToNine(cols.map(sanitize)));
+      const sanitized = cols.map(v => sanitize(v, type));
+      grouped[date].push(fillToNine(sanitized));
     });
 
     renderResults(grouped);
   })
   .catch(err => {
     console.error("🚨 Fetch error:", err);
-    document.getElementById('results').innerHTML = `<div style="color:red;font-weight:bold;">Error loading data</div>`;
+    document.getElementById('results').innerHTML = `<div style=\"color:red;font-weight:bold;\">Error loading data</div>`;
   });
 
 function formatDate(raw) {
@@ -53,13 +54,14 @@ function formatDate(raw) {
 
 function fillToNine(arr) {
   const filled = [...arr];
-  while (filled.length < 9) filled.push("-");
+  while (filled.length < 9) filled.push("N");
   return filled;
 }
 
-function sanitize(val) {
+function sanitize(val, type) {
   const clean = String(val).trim();
-  return clean === '' || clean === 'null' || clean === '-' ? '-' : clean;
+  if (clean === '' || clean.toLowerCase() === 'null' || clean === '-') return "N";
+  return clean;
 }
 
 function renderResults(data) {
