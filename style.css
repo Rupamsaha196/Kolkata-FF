@@ -1,143 +1,109 @@
-/* Base layout */
+/* Reset and base styles */
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #ffffff;
-  color: #000000;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  background-color: #ffffff;
+  color: #000;
   overflow-x: hidden;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 960px;
   margin: auto;
+  padding: 20px;
 }
 
 h1 {
   text-align: center;
+  color: #0d47a1;
   font-size: 28px;
   margin-bottom: 20px;
-  color: #0d47a1;
 }
 
-/* Date block */
+/* Date section */
 .date-section {
-  margin-bottom: 30px;
-  padding: 16px;
   background-color: #e3f2fd;
   border: 2px solid #64b5f6;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  margin-bottom: 30px;
 }
 
 .date-section.latest {
-  background-color: #bbdefb;
   border: 3px solid #2196f3;
-  box-shadow: 0 0 12px rgba(33, 150, 243, 0.7);
+  background-color: #bbdefb;
+  box-shadow: 0 0 12px rgba(33, 150, 243, 0.5);
 }
 
-/* Date header */
 .date-header {
-  text-align: center;
-  font-weight: bold;
-  font-size: 20px;
-  padding: 8px 0;
-  margin-bottom: 14px;
   background-color: #e1f5fe;
   color: #0d47a1;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px;
   border-radius: 8px;
+  text-align: center;
+  margin-bottom: 16px;
 }
 
-/* Result rows */
 .result-row {
   display: grid;
-  grid-template-columns: repeat(10, 1fr); /* 1 label + 9 cells */
+  grid-template-columns: 80px repeat(9, 1fr);
   gap: 8px;
-  text-align: center;
+  align-items: center;
   margin-bottom: 12px;
 }
 
-/* Row label */
 .row-label {
   background-color: #bbdefb;
   color: #0d47a1;
   font-weight: bold;
-  font-size: clamp(10px, 2vw, 16px);
+  font-size: clamp(12px, 2vw, 16px);
   padding: 8px;
   border-radius: 6px;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Result cell */
 .cell {
   background-color: #e3f2fd;
   border: 1px solid #90caf9;
-  font-size: clamp(10px, 2vw, 16px);
+  font-size: clamp(12px, 2vw, 16px);
   padding: 8px;
   border-radius: 6px;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* MEDIA QUERIES for responsive resizing */
-
-/* Very small screens (≤ 480px) */
-@media (max-width: 480px) {
-  .row-label,
-  .cell {
+/* Media Queries */
+@media (max-width: 768px) {
+  .result-row {
+    gap: 6px;
+  }
+  .row-label, .cell {
     font-size: 10px;
     padding: 6px;
   }
-
-  .result-row {
-    gap: 6px;
-  }
-
-  h1 {
-    font-size: 20px;
-  }
-
   .date-header {
     font-size: 16px;
   }
-}
-
-/* Medium screens (481px - 768px) */
-@media (max-width: 768px) {
-  .row-label,
-  .cell {
-    font-size: 12px;
-    padding: 6px;
-  }
-
-  .result-row {
-    gap: 6px;
-  }
-
   h1 {
-    font-size: 24px;
-  }
-
-  .date-header {
-    font-size: 18px;
-  }
-}
-
-/* Large screens (≥ 1200px) */
-@media (min-width: 1200px) {
-  .row-label,
-  .cell {
-    font-size: 16px;
-  }
-
-  .date-header {
     font-size: 22px;
   }
+}
 
-  h1 {
-    font-size: 32px;
+@media (max-width: 480px) {
+  .result-row {
+    gap: 4px;
+  }
+  .row-label, .cell {
+    font-size: 9px;
+    padding: 4px;
   }
 }
