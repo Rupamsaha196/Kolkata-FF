@@ -20,15 +20,15 @@ h1 {
   color: #0d47a1;
 }
 
-/* Each date block */
+/* Date block wrapper */
 .date-section {
   margin-bottom: 30px;
-  padding: 10px;
+  padding: 16px;
   background-color: #e3f2fd;
-  border: 2px solid #90caf9;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;
+  border: 2px solid #64b5f6;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
 }
 
 .date-section.latest {
@@ -37,114 +37,63 @@ h1 {
   box-shadow: 0 0 12px rgba(33, 150, 243, 0.7);
 }
 
-/* Date header */
+/* Date title */
 .date-header {
   text-align: center;
   font-weight: bold;
   font-size: 20px;
   padding: 8px 0;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
   background-color: #e1f5fe;
   color: #0d47a1;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
-/* Result grid */
+/* Result rows (PATTI, SINGLE, JACKPOT) */
 .result-row {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 4px;
-  text-align: center;
-  margin-bottom: 6px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 4px;
 }
 
-/* Label cell */
+.result-row::-webkit-scrollbar {
+  height: 6px;
+}
+.result-row::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 10px;
+}
+
+/* Label cell (left) */
 .row-label {
+  flex: 0 0 auto;
+  min-width: 60px;
   background-color: #bbdefb;
   color: #0d47a1;
   font-weight: bold;
-  font-size: clamp(10px, 1.8vw, 16px);
+  font-size: clamp(12px, 1.8vw, 16px);
   padding: 8px;
-  border-radius: 4px;
+  border-radius: 6px;
+  text-align: center;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
 }
 
-/* Value cell */
+/* Individual result cells */
 .cell {
+  flex: 0 0 auto;
+  min-width: 50px;
   background-color: #e3f2fd;
   border: 1px solid #90caf9;
-  font-size: clamp(10px, 1.8vw, 16px);
+  font-size: clamp(12px, 1.6vw, 16px);
   padding: 8px;
-  border-radius: 4px;
+  border-radius: 6px;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 0;
-}
-
-/* MEDIA QUERIES */
-
-/* For very small screens (≤ 480px) */
-@media (max-width: 480px) {
-  h1 {
-    font-size: 20px;
-  }
-
-  .date-header {
-    font-size: 16px;
-  }
-
-  .row-label,
-  .cell {
-    font-size: 10px;
-    padding: 4px;
-  }
-
-  .result-row {
-    gap: 2px;
-  }
-}
-
-/* For medium screens (481px - 768px) */
-@media (max-width: 768px) {
-  .row-label,
-  .cell {
-    font-size: 12px;
-    padding: 6px;
-  }
-
-  .date-header {
-    font-size: 18px;
-  }
-
-  h1 {
-    font-size: 24px;
-  }
-}
-
-/* For large screens (≥ 1200px) */
-@media (min-width: 1200px) {
-  .row-label,
-  .cell {
-    font-size: 16px;
-  }
-
-  .date-header {
-    font-size: 22px;
-  }
-
-  h1 {
-    font-size: 32px;
-  }
 }
