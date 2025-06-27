@@ -1,4 +1,3 @@
-/* Global Styles */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #ffffff;
@@ -21,7 +20,6 @@ h1 {
   color: #0d47a1;
 }
 
-/* Date Header */
 .date-header {
   font-weight: bold;
   font-size: 20px;
@@ -32,7 +30,7 @@ h1 {
   border-bottom: 2px solid #2196f3;
 }
 
-/* Highlight for latest date */
+/* Highlight latest */
 .date-section.latest .date-header {
   color: #ffffff;
   background-color: #0d47a1;
@@ -49,32 +47,32 @@ h1 {
   justify-items: center;
 }
 
-/* Result cell */
+/* Each cell */
 .cell {
   background-color: #e3f2fd;
   border: 1px solid #90caf9;
   border-radius: 8px;
-  padding: 12px 8px;
+  padding: 14px 10px;
   text-align: center;
-  font-size: clamp(12px, 4vw, 18px);
+  font-size: clamp(14px, 4vw, 18px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
   box-sizing: border-box;
-  transition: background-color 0.2s;
 }
 
+/* Hover */
 .cell:hover {
   background-color: #bbdefb;
 }
 
-/* MEDIA QUERIES */
+/* === MEDIA QUERIES === */
 
-/* Phones ≤480px */
+/* Mobile (≤480px) */
 @media (max-width: 480px) {
   h1 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .date-header {
@@ -84,13 +82,12 @@ h1 {
   }
 
   .cell {
-    font-size: 12px;
-    padding: 10px 6px;
-    border-radius: 6px;
+    font-size: 14px;
+    padding: 12px 8px;
   }
 
   .result-row {
-    gap: 6px;
+    gap: 8px;
   }
 
   .container {
@@ -98,7 +95,7 @@ h1 {
   }
 }
 
-/* Tablets ≤768px */
+/* Tablet (≤768px) */
 @media (max-width: 768px) {
   h1 {
     font-size: 24px;
@@ -109,16 +106,16 @@ h1 {
   }
 
   .cell {
-    font-size: 14px;
-    padding: 10px 7px;
+    font-size: 15px;
+    padding: 13px 10px;
   }
 
   .result-row {
-    gap: 8px;
+    gap: 10px;
   }
 }
 
-/* Large screens ≥1200px */
+/* Large screens */
 @media (min-width: 1200px) {
   h1 {
     font-size: 32px;
@@ -130,7 +127,7 @@ h1 {
 
   .cell {
     font-size: 18px;
-    padding: 14px 10px;
+    padding: 16px 12px;
   }
 
   .result-row {
