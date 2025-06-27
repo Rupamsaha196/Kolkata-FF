@@ -7,76 +7,80 @@ fetch(url)
   .then(rep => {
     const match = rep.match(/(?<=\().*(?=\);)/s);
     if (!match) throw new Error("❌ Failed to parse sheet data.");
-
+    
     const jsonData = JSON.parse(match[0]);
-    const rows = jsonData.table.rows.map(r => r.c.map(c => (c && c.v !== null) ? c.v : ''));
+    const rows = jsonData.table.rows.map(r =>
+      r.c.map(c => (c && c.v !== null) ? c.v : '')
+    );
 
     const grouped = {};
     rows.forEach(row => {
-      const [rawDate, type, ...values] = row;
+      const [rawDate, , ...cols] = row;
       const date = formatDate(rawDate);
       if (!grouped[date]) grouped[date] = [];
-      grouped[date].push(fillToNine(values.map(sanitize)));
+      grouped[date].push(fillToNine(cols.map(sanitize)));
     });
 
     renderResults(grouped);
   })
   .catch(err => {
-    document.getElementById('results').innerHTML =
-      `<div style=\"color: red; font-weight: bold;\">⚠️ Error loading data: ${err.message}</div>`;
+    console.error("🚨 Fetch error:", err);
+    document.getElementById('results').innerHTML = `<div style="color:red;font-weight:bold;">Error loading data</div>`;
   });
 
 function formatDate(raw) {
   if (typeof raw === 'string' && raw.includes('Date(')) {
     const match = raw.match(/Date\((\d+),(\d+),(\d+)\)/);
     if (match) {
-      const [, year, month, day] = match;
-      return `${String(day).padStart(2, '0')}/${String(Number(month) + 1).padStart(2, '0')}/${year}`;
+      const [, y, m, d] = match;
+      return `${String(d).padStart(2, '0')}/${String(+m + 1).padStart(2, '0')}/${y}`;
     }
   }
 
-  const d = new Date(raw);
-  if (!isNaN(d)) {
-    return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+  if (raw instanceof Date) {
+    return `${String(raw.getDate()).padStart(2, '0')}/${String(raw.getMonth() + 1).padStart(2, '0')}/${raw.getFullYear()}`;
   }
+
+  const parts = String(raw).split("-");
+  if (parts.length === 3) {
+    return parts[0].length === 4
+      ? `${parts[2]}/${parts[1]}/${parts[0]}`
+      : `${parts[0]}/${parts[1]}/${parts[2]}`;
+  }
+
   return String(raw);
 }
 
 function fillToNine(arr) {
   const filled = [...arr];
-  while (filled.length < 9) filled.push('-');
+  while (filled.length < 9) filled.push("-");
   return filled;
 }
 
 function sanitize(val) {
-  const cleaned = String(val).trim();
-  return cleaned === '' || cleaned === '-' || cleaned.toLowerCase() === 'null' ? '-' : cleaned;
+  const clean = String(val).trim();
+  return clean === '' || clean === 'null' || clean === '-' ? '-' : clean;
 }
 
 function renderResults(data) {
   const container = document.getElementById('results');
   container.innerHTML = '';
 
-  const sortedDates = Object.keys(data).sort((a, b) => {
-    const da = new Date(a.split('/').reverse().join('-'));
-    const db = new Date(b.split('/').reverse().join('-'));
-    return db - da;
-  });
+  const sortedDates = Object.keys(data).sort((a, b) =>
+    new Date(b.split("/").reverse().join("-")) - new Date(a.split("/").reverse().join("-"))
+  );
 
   const latestDate = sortedDates[0];
 
   sortedDates.forEach(date => {
-    const rows = data[date];
-
     const block = document.createElement('div');
-    block.className = 'date-section';
-    if (date === latestDate) block.classList.add('latest');
+    const isLatest = date === latestDate;
 
     block.innerHTML = `
-      <div class="date-header">Date: ${date}</div>
-      ${rows.map(row => `
+      <div class="date-header ${isLatest ? 'latest' : ''}">Date: ${date}</div>
+      ${data[date].map(row => `
         <div class="result-row">
-          ${row.map(v => `<div class="cell">${v}</div>`).join('')}
+          ${row.map(val => `<div class="cell">${val}</div>`).join('')}
         </div>
       `).join('')}
     `;
