@@ -20,7 +20,7 @@ h1 {
   color: #0d47a1;
 }
 
-/* Date block wrapper */
+/* Date block */
 .date-section {
   margin-bottom: 30px;
   padding: 16px;
@@ -28,7 +28,6 @@ h1 {
   border: 2px solid #64b5f6;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  overflow-x: auto;
 }
 
 .date-section.latest {
@@ -37,7 +36,7 @@ h1 {
   box-shadow: 0 0 12px rgba(33, 150, 243, 0.7);
 }
 
-/* Date title */
+/* Date header */
 .date-header {
   text-align: center;
   font-weight: bold;
@@ -49,51 +48,96 @@ h1 {
   border-radius: 8px;
 }
 
-/* Result rows (PATTI, SINGLE, JACKPOT) */
+/* Result rows */
 .result-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 1 label + 9 cells */
   gap: 8px;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding-bottom: 4px;
+  text-align: center;
+  margin-bottom: 12px;
 }
 
-.result-row::-webkit-scrollbar {
-  height: 6px;
-}
-.result-row::-webkit-scrollbar-thumb {
-  background: #90caf9;
-  border-radius: 10px;
-}
-
-/* Label cell (left) */
+/* Row label */
 .row-label {
-  flex: 0 0 auto;
-  min-width: 60px;
   background-color: #bbdefb;
   color: #0d47a1;
   font-weight: bold;
-  font-size: clamp(12px, 1.8vw, 16px);
+  font-size: clamp(10px, 2vw, 16px);
   padding: 8px;
   border-radius: 6px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-/* Individual result cells */
-.cell {
-  flex: 0 0 auto;
-  min-width: 50px;
-  background-color: #e3f2fd;
-  border: 1px solid #90caf9;
-  font-size: clamp(12px, 1.6vw, 16px);
-  padding: 8px;
-  border-radius: 6px;
-  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Result cell */
+.cell {
+  background-color: #e3f2fd;
+  border: 1px solid #90caf9;
+  font-size: clamp(10px, 2vw, 16px);
+  padding: 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* MEDIA QUERIES for responsive resizing */
+
+/* Very small screens (≤ 480px) */
+@media (max-width: 480px) {
+  .row-label,
+  .cell {
+    font-size: 10px;
+    padding: 6px;
+  }
+
+  .result-row {
+    gap: 6px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .date-header {
+    font-size: 16px;
+  }
+}
+
+/* Medium screens (481px - 768px) */
+@media (max-width: 768px) {
+  .row-label,
+  .cell {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .result-row {
+    gap: 6px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .date-header {
+    font-size: 18px;
+  }
+}
+
+/* Large screens (≥ 1200px) */
+@media (min-width: 1200px) {
+  .row-label,
+  .cell {
+    font-size: 16px;
+  }
+
+  .date-header {
+    font-size: 22px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
 }

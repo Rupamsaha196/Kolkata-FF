@@ -1,12 +1,10 @@
 const sheetID = "1JZriCauUF0pNvXXO267n6crzefBYwyoBmbCM2kfd1Bo";
-const sheetName = "www"; // Make sure this matches the actual tab name exactly
+const sheetName = "www";
 const url = `https://docs.google.com/spreadsheets/d/1JZriCauUF0pNvXXO267n6crzefBYwyoBmbCM2kfd1Bo/gviz/tq?sheet=www`;
 
 fetch(url)
   .then(res => res.text())
   .then(rep => {
-    console.log("Raw response from Google Sheets:", rep); // For debugging
-
     const match = rep.match(/(?<=\().*(?=\);)/s);
     if (!match) {
       throw new Error("❌ Failed to parse sheet data. Check if your sheet is public and the tab name is correct.");
@@ -34,6 +32,16 @@ fetch(url)
   });
 
 function formatDate(raw) {
+  // Handle Google Sheets format: "Date(2025,5,26)"
+  if (typeof raw === 'string' && raw.includes('Date(')) {
+    const match = raw.match(/Date\((\d+),(\d+),(\d+)\)/);
+    if (match) {
+      const [, year, month, day] = match;
+      return `${String(day).padStart(2, '0')}/${String(Number(month) + 1).padStart(2, '0')}/${year}`;
+    }
+  }
+
+  // Handle native Date object
   if (raw instanceof Date) {
     const day = String(raw.getDate()).padStart(2, '0');
     const month = String(raw.getMonth() + 1).padStart(2, '0');
@@ -41,14 +49,21 @@ function formatDate(raw) {
     return `${day}/${month}/${year}`;
   }
 
+  // Handle string format (e.g., "2025-06-26" or "26-06-2025")
   if (typeof raw === 'string') {
     const parts = raw.split('-');
     if (parts.length === 3) {
-      if (parts[0].length === 4) return `${parts[2]}/${parts[1]}/${parts[0]}`;
-      return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+      if (parts[0].length === 4) {
+        // "YYYY-MM-DD"
+        return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+      } else {
+        // "DD-MM-YYYY"
+        return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+      }
     }
   }
 
+  // Fallback: try parsing with JS Date
   try {
     const d = new Date(raw);
     if (!isNaN(d)) {
@@ -59,7 +74,7 @@ function formatDate(raw) {
     }
   } catch (e) {}
 
-  return String(raw);
+  return String(raw); // Final fallback
 }
 
 function fillToNine(arr) {
