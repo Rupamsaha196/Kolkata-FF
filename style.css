@@ -1,4 +1,4 @@
-/* Base layout */
+/* Global Styles */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #ffffff;
@@ -11,6 +11,7 @@ body {
 .container {
   max-width: 1000px;
   margin: auto;
+  padding-bottom: 30px;
 }
 
 h1 {
@@ -20,32 +21,23 @@ h1 {
   color: #0d47a1;
 }
 
-/* Date block */
-.date-section {
-  margin-bottom: 30px;
-  padding: 16px;
-  background-color: #e3f2fd;
-  border: 2px solid #64b5f6;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.date-section.latest {
-  background-color: #bbdefb;
-  border: 3px solid #2196f3;
-  box-shadow: 0 0 12px rgba(33, 150, 243, 0.7);
-}
-
-/* Date header */
+/* Date Header */
 .date-header {
-  text-align: center;
   font-weight: bold;
   font-size: 20px;
-  padding: 8px 0;
-  margin-bottom: 14px;
-  background-color: #e1f5fe;
+  padding: 10px;
+  margin: 30px 0 16px;
+  text-align: center;
   color: #0d47a1;
-  border-radius: 8px;
+  border-bottom: 2px solid #2196f3;
+}
+
+/* Highlight for latest date */
+.date-section.latest .date-header {
+  color: #ffffff;
+  background-color: #0d47a1;
+  border-radius: 6px;
+  border: none;
 }
 
 /* Result rows */
@@ -53,65 +45,95 @@ h1 {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  justify-items: center;
 }
 
 /* Result cell */
 .cell {
   background-color: #e3f2fd;
   border: 1px solid #90caf9;
-  font-size: clamp(12px, 3.5vw, 18px);
-  padding: 10px;
   border-radius: 8px;
+  padding: 12px 8px;
   text-align: center;
+  font-size: clamp(12px, 4vw, 18px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 100%;
   box-sizing: border-box;
+  transition: background-color 0.2s;
 }
 
-/* Responsive adjustments using media queries */
-@media (max-width: 768px) {
-  .result-row {
-    gap: 8px;
+.cell:hover {
+  background-color: #bbdefb;
+}
+
+/* MEDIA QUERIES */
+
+/* Phones ≤480px */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 22px;
   }
-  .cell {
-    font-size: clamp(11px, 4vw, 16px);
+
+  .date-header {
+    font-size: 16px;
+    margin-top: 24px;
     padding: 8px;
   }
-  .date-header {
-    font-size: 18px;
-  }
-  h1 {
-    font-size: 24px;
-  }
-}
 
-@media (max-width: 480px) {
+  .cell {
+    font-size: 12px;
+    padding: 10px 6px;
+    border-radius: 6px;
+  }
+
   .result-row {
     gap: 6px;
   }
-  .cell {
-    font-size: clamp(10px, 4.5vw, 15px);
-    padding: 6px;
-  }
-  .date-header {
-    font-size: 16px;
-  }
-  h1 {
-    font-size: 20px;
+
+  .container {
+    padding: 10px;
   }
 }
 
-@media (min-width: 1200px) {
-  .cell {
-    font-size: 18px;
-    padding: 12px;
+/* Tablets ≤768px */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 24px;
   }
+
+  .date-header {
+    font-size: 18px;
+  }
+
+  .cell {
+    font-size: 14px;
+    padding: 10px 7px;
+  }
+
+  .result-row {
+    gap: 8px;
+  }
+}
+
+/* Large screens ≥1200px */
+@media (min-width: 1200px) {
+  h1 {
+    font-size: 32px;
+  }
+
   .date-header {
     font-size: 22px;
   }
-  h1 {
-    font-size: 32px;
+
+  .cell {
+    font-size: 18px;
+    padding: 14px 10px;
+  }
+
+  .result-row {
+    gap: 12px;
   }
 }
