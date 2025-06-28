@@ -10,7 +10,11 @@ fetch(url)
 
     const jsonData = JSON.parse(match[0]);
     const rows = jsonData.table.rows.map(r =>
-      r.c.map(c => (c && c.v !== null) ? c.v : '')
+      r.c.map(c => {
+        if (!c) return '';
+        const val = (typeof c.v === 'string' || typeof c.v === 'number') ? String(c.v).trim() : (c.f ? String(c.f).trim() : '');
+        return val;
+      })
     );
 
     const grouped = {};
@@ -18,7 +22,11 @@ fetch(url)
       const [rawDate, type, ...cols] = row;
       const date = formatDate(rawDate);
       if (!grouped[date]) grouped[date] = [];
-      const sanitized = cols.map(v => sanitize(v, type));
+      
+      // Check if the type is "Jackpot" or "JACKPOT"
+      const isJackpotRow = type.toLowerCase() === "jackpot";
+      
+      const sanitized = cols.map((v, index) => sanitize(v, isJackpotRow, index));
       grouped[date].push(fillToNine(sanitized));
     });
 
@@ -26,7 +34,7 @@ fetch(url)
   })
   .catch(err => {
     console.error("🚨 Fetch error:", err);
-    document.getElementById('results').innerHTML = `<div style=\"color:red;font-weight:bold;\">Error loading data</div>`;
+    document.getElementById('results').innerHTML = `<div style="color:red;font-weight:bold;">Error loading data</div>`;
   });
 
 function formatDate(raw) {
@@ -58,8 +66,19 @@ function fillToNine(arr) {
   return filled;
 }
 
-function sanitize(val, type) {
+function sanitize(val, isJackpot = false) {
+  if (val === null || val === undefined) return "N";
   const clean = String(val).trim();
+  
+  // Check if it's a jackpot row
+  if (isJackpot) {
+    // If the value is empty or "-", return "N"
+    if (clean === '' || clean === '-') return "N";
+    // Allow any alphanumeric value
+    return clean; // Return the clean value directly
+  }
+
+  // For other rows, return "N" for empty or invalid values
   if (clean === '' || clean.toLowerCase() === 'null' || clean === '-') return "N";
   return clean;
 }
