@@ -1,56 +1,43 @@
-const sheetID = "1JZriCauUF0pNvXXO267n6crzefBYwyoBmbCM2kfd1Bo";
-const sheetName = "www";
-const url = `https://docs.google.com/spreadsheets/d/1JZriCauUF0pNvXXO267n6crzefBYwyoBmbCM2kfd1Bo/gviz/tq?sheet=www`;
+const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbhd3V_u9ofdKtZQq29aemLHvfsezMMErww2XpgSKF43pxCtnTrAYHHvWvliJ9LHQp1NNIcfAy_MhW/pub?output=csv"; // ← paste your CSV export link here
 
-fetch(url)
+
+
+fetch(csvUrl)
   .then(res => res.text())
-  .then(rep => {
-    const match = rep.match(/(?<=\().*(?=\);)/s);
-    if (!match) throw new Error("❌ Failed to parse sheet data.");
-
-    const jsonData = JSON.parse(match[0]);
-    const rows = jsonData.table.rows.map(r =>
-      r.c.map(c => {
-        if (!c) return '';
-        const val = (typeof c.v === 'string' || typeof c.v === 'number') ? String(c.v).trim() : (c.f ? String(c.f).trim() : '');
-        return val;
-      })
-    );
-
+  .then(csv => {
+    const rows = csv.trim().split("\n").map(r => r.split(",").map(cell => cell.trim()));
     const grouped = {};
+
     rows.forEach(row => {
+      // Skip if too short or is a header or has no date/type
+      if (!row || row.length < 3) return;
       const [rawDate, type, ...cols] = row;
+
+      if (!rawDate || !type || rawDate.toLowerCase().includes('date')) return;
+
       const date = formatDate(rawDate);
       if (!grouped[date]) grouped[date] = [];
-      
-      // Check if the type is "Jackpot" or "JACKPOT"
-      const isJackpotRow = type.toLowerCase() === "jackpot";
-      
-      const sanitized = cols.map((v, index) => sanitize(v, isJackpotRow, index));
+
+      const isJackpot = type.toLowerCase() === "jackpot";
+      const sanitized = cols.map((v, i) => sanitize(v, isJackpot, i));
       grouped[date].push(fillToNine(sanitized));
     });
 
     renderResults(grouped);
   })
   .catch(err => {
-    console.error("🚨 Fetch error:", err);
-    document.getElementById('results').innerHTML = `<div style="color:red;font-weight:bold;">Error loading data</div>`;
+    console.error("❌ CSV Load Error:", err);
+    document.getElementById('results').innerHTML =
+      `<div style="color:red;font-weight:bold;">Error loading data</div>`;
   });
 
 function formatDate(raw) {
-  if (typeof raw === 'string' && raw.includes('Date(')) {
-    const match = raw.match(/Date\((\d+),(\d+),(\d+)\)/);
-    if (match) {
-      const [, y, m, d] = match;
-      return `${String(d).padStart(2, '0')}/${String(+m + 1).padStart(2, '0')}/${y}`;
-    }
+  const d = new Date(raw);
+  if (!isNaN(d)) {
+    return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
   }
 
-  if (raw instanceof Date) {
-    return `${String(raw.getDate()).padStart(2, '0')}/${String(raw.getMonth() + 1).padStart(2, '0')}/${raw.getFullYear()}`;
-  }
-
-  const parts = String(raw).split("-");
+  const parts = String(raw).split(/[-/]/);
   if (parts.length === 3) {
     return parts[0].length === 4
       ? `${parts[2]}/${parts[1]}/${parts[0]}`
@@ -63,24 +50,15 @@ function formatDate(raw) {
 function fillToNine(arr) {
   const filled = [...arr];
   while (filled.length < 9) filled.push("N");
-  return filled;
+  return filled.slice(0, 9);
 }
 
 function sanitize(val, isJackpot = false) {
-  if (val === null || val === undefined) return "N";
-  const clean = String(val).trim();
-  
-  // Check if it's a jackpot row
+  const clean = String(val ?? "").trim();
   if (isJackpot) {
-    // If the value is empty or "-", return "N"
-    if (clean === '' || clean === '-') return "N";
-    // Allow any alphanumeric value
-    return clean; // Return the clean value directly
+    return (!clean || clean === "-") ? "N" : clean;
   }
-
-  // For other rows, return "N" for empty or invalid values
-  if (clean === '' || clean.toLowerCase() === 'null' || clean === '-') return "N";
-  return clean;
+  return (!clean || clean.toLowerCase() === "null" || clean === "-") ? "N" : clean;
 }
 
 function renderResults(data) {
